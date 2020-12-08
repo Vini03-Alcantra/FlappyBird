@@ -132,6 +132,18 @@ function estaoSobrepostos(elementoA, elementoB){
     return horizontal && vertical
 }
 
+function colidiu(passaro, barreiras){
+    let colidiu = false
+    barreiras.pares.forEach(ParDeBarreirras => {
+        if (!colidiu) {
+            const superior = ParDeBarreirras.superior.elemento
+            const inferior = ParDeBarreirras.inferior.elemento
+            colidiu = estaoSobrepostos(passaro.elemento, superior) || estaoSobrepostos(passaro.elemento, inferior)
+        }
+    })
+    return colidiu
+}
+
 
 function FlappyBird(){
     let pontos = 0;
@@ -153,6 +165,10 @@ function FlappyBird(){
         const temporizador = setInterval(() => {
             barreiras.animar()
             passaro.animar()
+
+            if (colidiu(passaro, barreiras)) {
+                clearInterval(temporizador)
+            }
         }, 20)
     }
 }
